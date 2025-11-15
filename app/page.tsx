@@ -44,7 +44,7 @@ export default function Home() {
       } else {
         setError(data.error || 'အသံဖိုင်ကို စာသားအဖြစ် ပြောင်းလဲ၍ မရပါ');
       }
-    } catch (err) {
+    } catch {
       setError('အမှားတစ်ခု ဖြစ်ပွားခဲ့သည်။ ကျေးဇူးပြု၍ ထပ်မံကြိုးစားပါ။');
     } finally {
       setIsTranscribing(false);
@@ -199,7 +199,7 @@ export default function Home() {
           <h3 className="text-xl font-bold text-blue-800 mb-3 myanmar-text">အသုံးပြုပုံ</h3>
           <ul className="space-y-2 text-blue-700 myanmar-text">
             <li>• မြန်မာအသံဖိုင်တစ်ခုကို ရွေးချယ်ပါ</li>
-            <li>• "စာသားပြောင်းပါ" ခလုတ်ကို နှိပ်ပါ</li>
+            <li>• &ldquo;စာသားပြောင်းပါ&rdquo; ခလုတ်ကို နှိပ်ပါ</li>
             <li>• ရလဒ်စာသားကို ကူးယူခြင်း သို့မဟုတ် ဒေါင်းလုဒ်လုပ်ပါ</li>
             <li>• အကောင်းဆုံးရလဒ်အတွက် ရှင်းလင်းသော အသံဖိုင်များကို အသုံးပြုပါ</li>
           </ul>
