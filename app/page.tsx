@@ -13,6 +13,20 @@ export default function Home() {
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      // Check file size (4MB limit for Vercel)
+      const maxSize = 4.5 * 1024 * 1024; // 4.5MB
+      if (file.size > maxSize) {
+        setError(
+          `ဖိုင်သည် အရွယ်အစားကြီးလွန်းပါသည်။ အများဆုံး ၄.၅MB အထိသာ လက်ခံပါသည်။ (လက်ရှိဖိုင်: ${(
+            file.size /
+            1024 /
+            1024
+          ).toFixed(2)}MB)`
+        );
+        setAudioFile(null);
+        return;
+      }
+
       setAudioFile(file);
       setError('');
       setTranscription('');
@@ -42,7 +56,8 @@ export default function Home() {
       if (data.success) {
         setTranscription(data.transcription);
       } else {
-        setError(data.error || 'အသံဖိုင်ကို စာသားအဖြစ် ပြောင်းလဲ၍ မရပါ');
+        // Show Myanmar error message if available, otherwise English
+        setError(data.errorMm || data.error || 'အသံဖိုင်ကို စာသားအဖြစ် ပြောင်းလဲ၍ မရပါ');
       }
     } catch {
       setError('အမှားတစ်ခု ဖြစ်ပွားခဲ့သည်။ ကျေးဇူးပြု၍ ထပ်မံကြိုးစားပါ။');
@@ -118,6 +133,9 @@ export default function Home() {
                   </p>
                   <p className="text-sm text-gray-500">
                     MP3, WAV, M4A, OGG စသည့် ဖိုင်များကို ပံ့ပိုးပေးပါသည်
+                  </p>
+                  <p className="text-xs text-orange-600 mt-1">
+                    အများဆုံး ၄.၅MB အထိသာ လက်ခံပါသည် (Vercel ကန့်သတ်ချက်)
                   </p>
                 </div>
               )}

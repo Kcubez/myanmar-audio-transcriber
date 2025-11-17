@@ -3,9 +3,12 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
-// Configure the maximum request body size (10MB)
+// Configure for Vercel deployment
 export const maxDuration = 60; // 60 seconds timeout
 export const runtime = 'nodejs';
+
+// Vercel has a 4.5MB body size limit on Hobby/Pro plans
+const MAX_FILE_SIZE = 4.5 * 1024 * 1024; // 4.5MB to be safe
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,6 +21,19 @@ export async function POST(request: NextRequest) {
 
     if (!audioFile) {
       return NextResponse.json({ error: 'No audio file provided' }, { status: 400 });
+    }
+
+    // Check file size limit for Vercel
+    if (audioFile.size > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        {
+          error: `File too large. Maximum size is ${
+            MAX_FILE_SIZE / 1024 / 1024
+          }MB for Vercel deployment.`,
+          errorMm: 'ဖိုင်သည် အရွယ်အစားကြီးလွန်းပါသည်။ အများဆုံး ၄MB အထိသာ လက်ခံပါသည်။',
+        },
+        { status: 413 }
+      );
     }
 
     // Convert file to base64
